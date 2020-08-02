@@ -1,2 +1,2 @@
-# quizz-app
-quizz app for interview
+# quizzy
+quiz application for job interview
