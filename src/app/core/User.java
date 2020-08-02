@@ -16,7 +16,9 @@ public class User {
         return this.score;
     }
 
-    public  void incrementScore() {
+    public void incrementScore() {
         this.score++;
     }
+
+    public void setScore(int score) {this.score = score;}
 }

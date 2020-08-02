@@ -4,8 +4,6 @@ import app.core.Question;
 import app.core.Quiz;
 import app.core.User;
 
-import javax.swing.plaf.nimbus.State;
-import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -63,7 +61,7 @@ public class dbUtil {
      * Inserts the user and his/her score to the db
      *
      * @param conn Connection to the db
-     * @param user user to insert
+     * @param user User to insert
      * @throws SQLException
      */
     public static void insertUser(Connection conn, User user) throws SQLException {
@@ -71,5 +69,30 @@ public class dbUtil {
         pstmt.setString(1, user.getName());
         pstmt.setInt(2, user.getScore());
         pstmt.executeUpdate();
+    }
+
+
+    /**
+     * Fetches the top k users
+     *
+     * @param conn Connection to the db
+     * @param k Number of users to fetch
+     * @throws SQLException
+     */
+    public static void fetchLeaderBoard(Connection conn, int k) throws SQLException {
+        ArrayList<User> leaderboard = new ArrayList<>();
+        PreparedStatement pstmt = conn.prepareStatement("SELECT name, score FROM users ORDER BY score DESC LIMIT ?;");
+        pstmt.setInt(1, k);
+        ResultSet rs = pstmt.executeQuery();
+
+        while (rs.next()) {
+            User user = new User(rs.getString("name"));
+            user.setScore(rs.getInt("score"));
+            leaderboard.add(user);
+        }
+
+        for (User u: leaderboard) {
+            System.out.println(u.getName() + "\t\t" + u.getScore());
+        }
     }
 }

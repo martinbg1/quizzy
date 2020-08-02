@@ -1,8 +1,6 @@
 package app.core;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
 
@@ -15,8 +13,9 @@ public class App {
             dbUtil.fetchQuiz(conn, null);
             Quiz quiz = dbUtil.fetchQuiz(conn, null);
 
+
             Scanner keyBoardInput = new Scanner(System.in);
-            System.out.println("Hva heter du");
+            System.out.println("Hva heter du?");
             String name = keyBoardInput.nextLine();
             User user = new User(name);
 
@@ -31,6 +30,9 @@ public class App {
 
             System.out.println("You got " + user.getScore() + "/" + quiz.getQuizLength() + " correct answers.");
             dbUtil.insertUser(conn, user);
+
+            System.out.println("\nTop 5 scores:");
+            dbUtil.fetchLeaderBoard(conn, 5);
         }
         catch (SQLException throwables) {
             throwables.printStackTrace();
