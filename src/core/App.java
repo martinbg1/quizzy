@@ -1,10 +1,11 @@
-package app.core;
+package core;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
-import app.core.db.dbUtil;
+import core.db.dbUtil;
 
 public class App {
 
@@ -21,7 +22,7 @@ public class App {
 
             for (Question q : quiz.getQuizSet()) {
                 System.out.println(q.getPrompt());
-                Character answer = keyBoardInput.nextLine().charAt(0);
+                String answer = keyBoardInput.nextLine();
 
                 if (answer.equals(q.getAnswer())) {
                     user.incrementScore();
@@ -32,7 +33,7 @@ public class App {
             dbUtil.insertUser(conn, user);
 
             System.out.println("\nTop 5 scores:");
-            dbUtil.fetchLeaderBoard(conn, 5);
+            ArrayList<User> leaderBoard = dbUtil.fetchLeaderBoard(conn, 5);
         }
         catch (SQLException throwables) {
             throwables.printStackTrace();

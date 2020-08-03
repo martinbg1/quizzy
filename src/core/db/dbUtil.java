@@ -1,8 +1,8 @@
-package app.core.db;
+package core.db;
 
-import app.core.Question;
-import app.core.Quiz;
-import app.core.User;
+import core.User;
+import core.Question;
+import core.Quiz;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -49,7 +49,7 @@ public class dbUtil {
 
 
         while (rs.next()) {
-            Question q = new Question(rs.getString("prompt"), rs.getString("answer").charAt(0), rs.getString("theme"));
+            Question q = new Question(rs.getString("prompt"), rs.getString("answer"), rs.getString("theme"));
             quizSet.add(q);
         }
 
@@ -79,7 +79,7 @@ public class dbUtil {
      * @param k Number of users to fetch
      * @throws SQLException
      */
-    public static void fetchLeaderBoard(Connection conn, int k) throws SQLException {
+    public static ArrayList<User> fetchLeaderBoard(Connection conn, int k) throws SQLException {
         ArrayList<User> leaderboard = new ArrayList<>();
         PreparedStatement pstmt = conn.prepareStatement("SELECT name, score FROM users ORDER BY score DESC LIMIT ?;");
         pstmt.setInt(1, k);
@@ -90,9 +90,6 @@ public class dbUtil {
             user.setScore(rs.getInt("score"));
             leaderboard.add(user);
         }
-
-        for (User u: leaderboard) {
-            System.out.println(u.getName() + "\t\t" + u.getScore());
-        }
+        return leaderboard;
     }
 }
